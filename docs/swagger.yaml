@@ -20,6 +20,8 @@ definitions:
     properties:
       description:
         type: string
+      image:
+        type: string
       ingredients:
         items:
           type: string
@@ -114,6 +116,8 @@ definitions:
       description:
         type: string
       id:
+        type: string
+      image:
         type: string
       ingredients:
         description: array of ingredient IDs
@@ -437,7 +441,8 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a new product with name, description, ingredients and price
+      description: Create a new product with name, description, ingredients, price,
+        and image
       parameters:
       - description: Product details
         in: body

@@ -421,7 +421,7 @@
                 }
             },
             "post": {
-                "description": "Create a new product with name, description, ingredients and price",
+                "description": "Create a new product with name, description, ingredients, price, and image",
                 "consumes": [
                     "application/json"
                 ],
@@ -872,6 +872,9 @@
                 "description": {
                     "type": "string"
                 },
+                "image": {
+                    "type": "string"
+                },
                 "ingredients": {
                     "type": "array",
                     "items": {
@@ -1012,6 +1015,9 @@
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "image": {
                     "type": "string"
                 },
                 "ingredients": {

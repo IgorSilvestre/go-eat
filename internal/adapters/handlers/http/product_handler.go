@@ -20,11 +20,12 @@ type createProductReq struct {
 	Description string      `json:"description"`
 	Ingredients []uuid.UUID `json:"ingredients"`
 	Price       float64     `json:"price"`
+	Image       string      `json:"image"`
 }
 
 // Create godoc
 // @Summary Create a new product
-// @Description Create a new product with name, description, ingredients and price
+// @Description Create a new product with name, description, ingredients, price, and image
 // @Tags products
 // @Accept json
 // @Produce json
@@ -39,7 +40,7 @@ func (h *ProductHandler) Create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	product, err := h.productService.Create(req.Name, req.Description, req.Ingredients, req.Price)
+	product, err := h.productService.Create(req.Name, req.Description, req.Ingredients, req.Price, req.Image)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -113,7 +114,7 @@ func (h *ProductHandler) Update(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	product, err := h.productService.Update(id, req.Name, req.Description, req.Ingredients, req.Price)
+	product, err := h.productService.Update(id, req.Name, req.Description, req.Ingredients, req.Price, req.Image)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}

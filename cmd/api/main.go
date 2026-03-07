@@ -17,6 +17,10 @@ import (
 	"github.com/yokeTH/gofiber-scalar/scalar/v2"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+
+	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/mongodb"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
 // @title Restaurant API
@@ -46,6 +50,16 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println("Connected to MongoDB!")
+
+	// Run migrations
+	m, err := migrate.New("file://migrations", mongoURI)
+	if err != nil {
+		log.Fatalf("Could not create migration instance: %v", err)
+	}
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatalf("Could not run up migrations: %v", err)
+	}
+	fmt.Println("Migrations applied successfully!")
 
 	db := client.Database("restaurant")
 
