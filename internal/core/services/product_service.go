@@ -15,12 +15,13 @@ func NewProductService(repo ports.ProductRepository) ports.ProductService {
 	return &productService{repo: repo}
 }
 
-func (s *productService) Create(name, description string, ingredients []uuid.UUID, price float64) (*domain.Product, error) {
+func (s *productService) Create(name, description string, ingredients []uuid.UUID, price float64, image string) (*domain.Product, error) {
 	product := &domain.Product{
 		Name:        name,
 		Description: description,
 		Ingredients: ingredients,
 		Price:       price,
+		Image:       image,
 	}
 	err := s.repo.Create(product)
 	if err != nil {
@@ -37,7 +38,7 @@ func (s *productService) List() ([]domain.Product, error) {
 	return s.repo.GetAll()
 }
 
-func (s *productService) Update(id uuid.UUID, name, description string, ingredients []uuid.UUID, price float64) (*domain.Product, error) {
+func (s *productService) Update(id uuid.UUID, name, description string, ingredients []uuid.UUID, price float64, image string) (*domain.Product, error) {
 	product, err := s.repo.GetByID(id)
 	if err != nil {
 		return nil, err
@@ -46,6 +47,7 @@ func (s *productService) Update(id uuid.UUID, name, description string, ingredie
 	product.Description = description
 	product.Ingredients = ingredients
 	product.Price = price
+	product.Image = image
 
 	err = s.repo.Update(product)
 	if err != nil {

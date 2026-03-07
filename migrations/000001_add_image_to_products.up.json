@@ -1,0 +1,12 @@
+[
+    {
+        "update": "products",
+        "updates": [
+            {
+                "q": {},
+                "u": { "$set": { "image": "" } },
+                "multi": true
+            }
+        ]
+    }
+]

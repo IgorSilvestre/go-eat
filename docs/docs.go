@@ -427,7 +427,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create a new product with name, description, ingredients and price",
+                "description": "Create a new product with name, description, ingredients, price, and image",
                 "consumes": [
                     "application/json"
                 ],
@@ -878,6 +878,9 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
+                "image": {
+                    "type": "string"
+                },
                 "ingredients": {
                     "type": "array",
                     "items": {
@@ -1018,6 +1021,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "image": {
                     "type": "string"
                 },
                 "ingredients": {
