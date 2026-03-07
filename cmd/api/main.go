@@ -6,16 +6,23 @@ import (
 	"log"
 	"os"
 
+	_ "restaurant-api/docs"
 	"restaurant-api/internal/adapters/handlers/http"
 	"restaurant-api/internal/adapters/repositories/mongodb"
 	"restaurant-api/internal/core/services"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+	"github.com/yokeTH/gofiber-scalar/scalar/v2"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// @title Restaurant API
+// @version 1.0
+// @description REST API for a restaurant backend
+// @host localhost:7000
+// @BasePath /api/v1
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, relying on environment variables")
@@ -61,9 +68,9 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/health", func(c *fiber.Ctx) error {
-		return c.JSON(fiber.Map{"status": "ok"})
-	})
+	app.Get("/docs/*", scalar.New())
+
+	app.Get("/health", HealthCheck)
 
 	api := app.Group("/api/v1")
 
@@ -98,4 +105,16 @@ func main() {
 	orders.Get("/:id", orderHandler.Get)
 
 	log.Fatal(app.Listen(":7000"))
+}
+
+// HealthCheck godoc
+// @Summary Show the status of server
+// @Description get the status of server
+// @Tags root
+// @Accept */*
+// @Produce json
+// @Success 200 {object} map[string]string
+// @Router /health [get]
+func HealthCheck(c *fiber.Ctx) error {
+	return c.JSON(fiber.Map{"status": "ok"})
 }
