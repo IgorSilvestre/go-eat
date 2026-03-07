@@ -61,7 +61,11 @@ func main() {
 
 	app := fiber.New()
 
-	api := app.Group("/api")
+	app.Get("/health", func(c *fiber.Ctx) error {
+		return c.JSON(fiber.Map{"status": "ok"})
+	})
+
+	api := app.Group("/api/v1")
 
 	// Users routes
 	users := api.Group("/users")
