@@ -38,6 +38,11 @@ func main() {
 		log.Fatal("DB_MONGO_URL environment variable is not set")
 	}
 
+	dbName := os.Getenv("DB_MONGO_NAME")
+	if dbName == "" {
+		dbName = "restaurant"
+	}
+
 	// Connect to MongoDB
 	clientOptions := options.Client().ApplyURI(mongoURI)
 	client, err := mongo.Connect(context.Background(), clientOptions)
@@ -61,7 +66,7 @@ func main() {
 	}
 	fmt.Println("Migrations applied successfully!")
 
-	db := client.Database("restaurant")
+	db := client.Database(dbName)
 
 	// Repositories
 	userRepo := mongodb.NewUserRepository(db)

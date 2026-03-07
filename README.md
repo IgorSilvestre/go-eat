@@ -42,10 +42,11 @@ The project follows the **Hexagonal Architecture (Ports and Adapters)** pattern:
 
 ### Environment Variables
 
-The application requires the following environment variable to be set in a `.env` file or in your environment:
+The application requires the following environment variables to be set in a `.env` file or in your environment:
 
 ```env
-DB_MONGO_URL=mongodb://your-username:your-password@your-host:your-port/restaurant
+DB_MONGO_URL=mongodb://your-username:your-password@your-host:your-port/restaurant?authSource=admin
+DB_MONGO_NAME=restaurant
 ```
 
 ### Installation
