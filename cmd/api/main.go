@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	_ "restaurant-api/docs"
+	"restaurant-api/docs"
 	"restaurant-api/internal/adapters/handlers/http"
 	"restaurant-api/internal/adapters/repositories/mongodb"
 	"restaurant-api/internal/core/services"
@@ -68,7 +68,9 @@ func main() {
 
 	app := fiber.New()
 
-	app.Get("/docs/*", scalar.New())
+	app.Get("/docs/*", scalar.New(scalar.Config{
+		FileContentString: docs.SwaggerInfo.ReadDoc(),
+	}))
 
 	app.Get("/health", HealthCheck)
 
