@@ -12,6 +12,7 @@ import (
 	"restaurant-api/internal/core/services"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/joho/godotenv"
 	"github.com/yokeTH/gofiber-scalar/scalar/v2"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -67,6 +68,7 @@ func main() {
 	orderHandler := http.NewOrderHandler(orderService)
 
 	app := fiber.New()
+	app.Use(cors.New())
 
 	app.Get("/docs/*", scalar.New(scalar.Config{
 		FileContentString: docs.SwaggerInfo.ReadDoc(),
