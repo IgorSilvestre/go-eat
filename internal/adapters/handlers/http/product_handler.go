@@ -22,6 +22,17 @@ type createProductReq struct {
 	Price       float64     `json:"price"`
 }
 
+// Create godoc
+// @Summary Create a new product
+// @Description Create a new product with name, description, ingredients and price
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param request body createProductReq true "Product details"
+// @Success 201 {object} domain.Product
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /products [post]
 func (h *ProductHandler) Create(c *fiber.Ctx) error {
 	var req createProductReq
 	if err := c.BodyParser(&req); err != nil {
@@ -36,6 +47,16 @@ func (h *ProductHandler) Create(c *fiber.Ctx) error {
 	return c.Status(fiber.StatusCreated).JSON(product)
 }
 
+// Get godoc
+// @Summary Get product by ID
+// @Description Get details of a single product by ID
+// @Tags products
+// @Produce json
+// @Param id path string true "Product ID"
+// @Success 200 {object} domain.Product
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Router /products/{id} [get]
 func (h *ProductHandler) Get(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -51,6 +72,14 @@ func (h *ProductHandler) Get(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
+// List godoc
+// @Summary List all products
+// @Description Get a list of all products
+// @Tags products
+// @Produce json
+// @Success 200 {array} domain.Product
+// @Failure 500 {object} map[string]string
+// @Router /products [get]
 func (h *ProductHandler) List(c *fiber.Ctx) error {
 	products, err := h.productService.List()
 	if err != nil {
@@ -60,6 +89,18 @@ func (h *ProductHandler) List(c *fiber.Ctx) error {
 	return c.JSON(products)
 }
 
+// Update godoc
+// @Summary Update a product
+// @Description Update product details by ID
+// @Tags products
+// @Accept json
+// @Produce json
+// @Param id path string true "Product ID"
+// @Param request body createProductReq true "Product details"
+// @Success 200 {object} domain.Product
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /products/{id} [put]
 func (h *ProductHandler) Update(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -80,6 +121,15 @@ func (h *ProductHandler) Update(c *fiber.Ctx) error {
 	return c.JSON(product)
 }
 
+// Delete godoc
+// @Summary Delete a product
+// @Description Delete a product by ID
+// @Tags products
+// @Param id path string true "Product ID"
+// @Success 204
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /products/{id} [delete]
 func (h *ProductHandler) Delete(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)

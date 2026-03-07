@@ -1,0 +1,714 @@
+basePath: /api/v1
+definitions:
+  internal_adapters_handlers_http.createIngredientReq:
+    properties:
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  internal_adapters_handlers_http.createOrderReq:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/restaurant-api_internal_core_ports.OrderItemInput'
+        type: array
+      user_id:
+        type: string
+    type: object
+  internal_adapters_handlers_http.createProductReq:
+    properties:
+      description:
+        type: string
+      ingredients:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  internal_adapters_handlers_http.createUserReq:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  restaurant-api_internal_core_domain.Ingredient:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      updated_at:
+        type: string
+    type: object
+  restaurant-api_internal_core_domain.Order:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      items:
+        description: Stored separately in MongoDB, populated in memory
+        items:
+          $ref: '#/definitions/restaurant-api_internal_core_domain.OrderProduct'
+        type: array
+      phone_number:
+        description: Stored alongside user_id as per diagram
+        type: string
+      total_price:
+        type: number
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  restaurant-api_internal_core_domain.OrderProduct:
+    properties:
+      adicionais:
+        description: array of extra ingredient IDs
+        items:
+          type: string
+        type: array
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      ingredients:
+        description: array of ingredient IDs included
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      order_id:
+        type: string
+      price:
+        description: calculated price (base product + adicionais)
+        type: number
+      product_id:
+        type: string
+      removed:
+        description: array of removed ingredient IDs
+        items:
+          type: string
+        type: array
+      updated_at:
+        type: string
+    type: object
+  restaurant-api_internal_core_domain.Product:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      ingredients:
+        description: array of ingredient IDs
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      price:
+        type: number
+      updated_at:
+        type: string
+    type: object
+  restaurant-api_internal_core_domain.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  restaurant-api_internal_core_ports.OrderItemInput:
+    properties:
+      adicionais:
+        items:
+          type: string
+        type: array
+      product_id:
+        type: string
+      removed:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:7000
+info:
+  contact: {}
+  description: REST API for a restaurant backend
+  title: Restaurant API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      consumes:
+      - '*/*'
+      description: get the status of server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Show the status of server
+      tags:
+      - root
+  /ingredients:
+    get:
+      description: Get a list of all ingredients
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/restaurant-api_internal_core_domain.Ingredient'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all ingredients
+      tags:
+      - ingredients
+    post:
+      consumes:
+      - application/json
+      description: Create a new ingredient with name and price
+      parameters:
+      - description: Ingredient details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_handlers_http.createIngredientReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.Ingredient'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new ingredient
+      tags:
+      - ingredients
+  /ingredients/{id}:
+    delete:
+      description: Delete an ingredient by ID
+      parameters:
+      - description: Ingredient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete an ingredient
+      tags:
+      - ingredients
+    get:
+      description: Get details of a single ingredient by ID
+      parameters:
+      - description: Ingredient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.Ingredient'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get ingredient by ID
+      tags:
+      - ingredients
+    put:
+      consumes:
+      - application/json
+      description: Update ingredient details by ID
+      parameters:
+      - description: Ingredient ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Ingredient details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_handlers_http.createIngredientReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.Ingredient'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update an ingredient
+      tags:
+      - ingredients
+  /orders:
+    get:
+      description: Get a list of all orders
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/restaurant-api_internal_core_domain.Order'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all orders
+      tags:
+      - orders
+    post:
+      consumes:
+      - application/json
+      description: Create a new order with user ID and items
+      parameters:
+      - description: Order details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_handlers_http.createOrderReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.Order'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new order
+      tags:
+      - orders
+  /orders/{id}:
+    get:
+      description: Get details of a single order by ID
+      parameters:
+      - description: Order ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.Order'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get order by ID
+      tags:
+      - orders
+  /products:
+    get:
+      description: Get a list of all products
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/restaurant-api_internal_core_domain.Product'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all products
+      tags:
+      - products
+    post:
+      consumes:
+      - application/json
+      description: Create a new product with name, description, ingredients and price
+      parameters:
+      - description: Product details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_handlers_http.createProductReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.Product'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new product
+      tags:
+      - products
+  /products/{id}:
+    delete:
+      description: Delete a product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a product
+      tags:
+      - products
+    get:
+      description: Get details of a single product by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.Product'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get product by ID
+      tags:
+      - products
+    put:
+      consumes:
+      - application/json
+      description: Update product details by ID
+      parameters:
+      - description: Product ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Product details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_handlers_http.createProductReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.Product'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a product
+      tags:
+      - products
+  /users:
+    get:
+      description: Get a list of all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/restaurant-api_internal_core_domain.User'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with name, email and phone number
+      parameters:
+      - description: User details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_handlers_http.createUserReq'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Delete a user
+      tags:
+      - users
+    get:
+      description: Get details of a single user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update user details by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/internal_adapters_handlers_http.createUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/restaurant-api_internal_core_domain.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Update a user
+      tags:
+      - users
+swagger: "2.0"
