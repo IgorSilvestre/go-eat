@@ -1,0 +1,145 @@
+### Variables
+@baseUrl = http://localhost:7000/api/v1
+
+### Health Check
+GET http://localhost:7000/health
+
+### Documentation (Scalar/Swagger)
+GET http://localhost:7000/docs/
+
+################################################################################
+### USERS
+################################################################################
+
+### List Users
+GET {{baseUrl}}/users
+
+### Create User
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "phone_number": "+1234567890"
+}
+
+> {% client.global.set("user_id", response.body.id); %}
+
+### Get User
+GET {{baseUrl}}/users/{{user_id}}
+
+### Update User
+PUT {{baseUrl}}/users/{{user_id}}
+Content-Type: application/json
+
+{
+  "name": "John Updated",
+  "email": "john_updated@example.com",
+  "phone_number": "+0987654321"
+}
+
+### Delete User
+DELETE {{baseUrl}}/users/{{user_id}}
+
+
+################################################################################
+### INGREDIENTS
+################################################################################
+
+### List Ingredients
+GET {{baseUrl}}/ingredients
+
+### Create Ingredient
+POST {{baseUrl}}/ingredients
+Content-Type: application/json
+
+{
+  "name": "Tomato",
+  "price": 0.50
+}
+
+> {% client.global.set("ingredient_id", response.body.id); %}
+
+### Get Ingredient
+GET {{baseUrl}}/ingredients/{{ingredient_id}}
+
+### Update Ingredient
+PUT {{baseUrl}}/ingredients/{{ingredient_id}}
+Content-Type: application/json
+
+{
+  "name": "Cherry Tomato",
+  "price": 0.75
+}
+
+### Delete Ingredient
+DELETE {{baseUrl}}/ingredients/{{ingredient_id}}
+
+
+################################################################################
+### PRODUCTS
+################################################################################
+
+### List Products
+GET {{baseUrl}}/products
+
+### Create Product
+POST {{baseUrl}}/products
+Content-Type: application/json
+
+{
+  "name": "Burger",
+  "description": "Delicious beef burger",
+  "ingredients": ["{{ingredient_id}}"],
+  "price": 10.00,
+  "image": "burger.jpg"
+}
+
+> {% client.global.set("product_id", response.body.id); %}
+
+### Get Product
+GET {{baseUrl}}/products/{{product_id}}
+
+### Update Product
+PUT {{baseUrl}}/products/{{product_id}}
+Content-Type: application/json
+
+{
+  "name": "Cheeseburger",
+  "description": "Delicious beef burger with cheese",
+  "ingredients": ["{{ingredient_id}}"],
+  "price": 11.00,
+  "image": "cheeseburger.jpg"
+}
+
+### Delete Product
+DELETE {{baseUrl}}/products/{{product_id}}
+
+
+################################################################################
+### ORDERS
+################################################################################
+
+### List Orders
+GET {{baseUrl}}/orders
+
+### Create Order
+POST {{baseUrl}}/orders
+Content-Type: application/json
+
+{
+  "user_id": "{{user_id}}",
+  "items": [
+    {
+      "product_id": "{{product_id}}",
+      "adicionais": ["{{ingredient_id}}"],
+      "removed": []
+    }
+  ]
+}
+
+> {% client.global.set("order_id", response.body.id); %}
+
+### Get Order
+GET {{baseUrl}}/orders/{{order_id}}
