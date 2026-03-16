@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net/url"
 	"os"
 
 	"restaurant-api/docs"
@@ -56,8 +57,17 @@ func main() {
 	}
 	fmt.Println("Connected to MongoDB!")
 
+	// Prepare migration URI
+	migrationURI := mongoURI
+	if u, err := url.Parse(mongoURI); err == nil {
+		if u.Path == "" || u.Path == "/" {
+			u.Path = "/" + dbName
+			migrationURI = u.String()
+		}
+	}
+
 	// Run migrations
-	m, err := migrate.New("file://migrations", mongoURI)
+	m, err := migrate.New("file://migrations", migrationURI)
 	if err != nil {
 		log.Fatalf("Could not create migration instance: %v", err)
 	}
