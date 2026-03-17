@@ -16,21 +16,6 @@ definitions:
       user_id:
         type: string
     type: object
-  internal_adapters_handlers_http.createProductReq:
-    properties:
-      description:
-        type: string
-      image:
-        type: string
-      ingredients:
-        items:
-          type: string
-        type: array
-      name:
-        type: string
-      price:
-        type: number
-    type: object
   internal_adapters_handlers_http.createUserReq:
     properties:
       email:
@@ -440,16 +425,33 @@ paths:
       - products
     post:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Create a new product with name, description, ingredients, price,
         and image
       parameters:
-      - description: Product details
-        in: body
-        name: request
+      - description: Product Name
+        in: formData
+        name: name
         required: true
-        schema:
-          $ref: '#/definitions/internal_adapters_handlers_http.createProductReq'
+        type: string
+      - description: Product Description
+        in: formData
+        name: description
+        type: string
+      - description: Comma-separated UUIDs of ingredients
+        in: formData
+        name: ingredients
+        type: string
+      - description: Product Price
+        in: formData
+        name: price
+        required: true
+        type: number
+      - description: Product Image
+        in: formData
+        name: image
+        required: true
+        type: file
       produces:
       - application/json
       responses:
@@ -531,7 +533,7 @@ paths:
       - products
     put:
       consumes:
-      - application/json
+      - multipart/form-data
       description: Update product details by ID
       parameters:
       - description: Product ID
@@ -539,12 +541,26 @@ paths:
         name: id
         required: true
         type: string
-      - description: Product details
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/internal_adapters_handlers_http.createProductReq'
+      - description: Product Name
+        in: formData
+        name: name
+        type: string
+      - description: Product Description
+        in: formData
+        name: description
+        type: string
+      - description: Comma-separated UUIDs of ingredients
+        in: formData
+        name: ingredients
+        type: string
+      - description: Product Price
+        in: formData
+        name: price
+        type: number
+      - description: Product Image
+        in: formData
+        name: image
+        type: file
       produces:
       - application/json
       responses:

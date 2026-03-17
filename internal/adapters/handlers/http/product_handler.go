@@ -1,6 +1,12 @@
 package http
 
 import (
+	"context"
+	"mime/multipart"
+	"path/filepath"
+	"strconv"
+	"strings"
+
 	"restaurant-api/internal/core/ports"
 
 	"github.com/gofiber/fiber/v2"
@@ -9,10 +15,14 @@ import (
 
 type ProductHandler struct {
 	productService ports.ProductService
+	storageService ports.StorageService
 }
 
-func NewProductHandler(productService ports.ProductService) *ProductHandler {
-	return &ProductHandler{productService: productService}
+func NewProductHandler(productService ports.ProductService, storageService ports.StorageService) *ProductHandler {
+	return &ProductHandler{
+		productService: productService,
+		storageService: storageService,
+	}
 }
 
 type createProductReq struct {
@@ -23,24 +33,81 @@ type createProductReq struct {
 	Image       string      `json:"image"`
 }
 
+func parseIngredients(ingredientsStr string) ([]uuid.UUID, error) {
+	if ingredientsStr == "" {
+		return []uuid.UUID{}, nil
+	}
+	parts := strings.Split(ingredientsStr, ",")
+	var uuids []uuid.UUID
+	for _, part := range parts {
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+		id, err := uuid.Parse(part)
+		if err != nil {
+			return nil, err
+		}
+		uuids = append(uuids, id)
+	}
+	return uuids, nil
+}
+
+func isImageFile(file *multipart.FileHeader) bool {
+	ext := strings.ToLower(filepath.Ext(file.Filename))
+	return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif" || ext == ".webp"
+}
+
 // Create godoc
 // @Summary Create a new product
 // @Description Create a new product with name, description, ingredients, price, and image
 // @Tags products
-// @Accept json
+// @Accept multipart/form-data
 // @Produce json
-// @Param request body createProductReq true "Product details"
+// @Param name formData string true "Product Name"
+// @Param description formData string false "Product Description"
+// @Param ingredients formData string false "Comma-separated UUIDs of ingredients"
+// @Param price formData number true "Product Price"
+// @Param image formData file true "Product Image"
 // @Success 201 {object} domain.Product
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /products [post]
 func (h *ProductHandler) Create(c *fiber.Ctx) error {
-	var req createProductReq
-	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	name := c.FormValue("name")
+	if name == "" {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "name is required"})
 	}
 
-	product, err := h.productService.Create(req.Name, req.Description, req.Ingredients, req.Price, req.Image)
+	description := c.FormValue("description")
+
+	priceStr := c.FormValue("price")
+	price, err := strconv.ParseFloat(priceStr, 64)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid price"})
+	}
+
+	ingredientsStr := c.FormValue("ingredients")
+	ingredients, err := parseIngredients(ingredientsStr)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid ingredients format"})
+	}
+
+	file, err := c.FormFile("image")
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "image is required"})
+	}
+
+	if !isImageFile(file) {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid image format"})
+	}
+
+	imageURL, err := h.storageService.UploadImage(context.Background(), file)
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to upload image: " + err.Error()})
+	}
+
+	product, err := h.productService.Create(name, description, ingredients, price, imageURL)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -94,10 +161,14 @@ func (h *ProductHandler) List(c *fiber.Ctx) error {
 // @Summary Update a product
 // @Description Update product details by ID
 // @Tags products
-// @Accept json
+// @Accept multipart/form-data
 // @Produce json
 // @Param id path string true "Product ID"
-// @Param request body createProductReq true "Product details"
+// @Param name formData string false "Product Name"
+// @Param description formData string false "Product Description"
+// @Param ingredients formData string false "Comma-separated UUIDs of ingredients"
+// @Param price formData number false "Product Price"
+// @Param image formData file false "Product Image"
 // @Success 200 {object} domain.Product
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
@@ -109,17 +180,60 @@ func (h *ProductHandler) Update(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid product id"})
 	}
 
-	var req createProductReq
-	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	product, err := h.productService.Get(id)
+	if err != nil {
+		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "product not found"})
 	}
 
-	product, err := h.productService.Update(id, req.Name, req.Description, req.Ingredients, req.Price, req.Image)
+	name := c.FormValue("name")
+	if name == "" {
+		name = product.Name
+	}
+
+	description := c.FormValue("description")
+	if description == "" {
+		description = product.Description
+	}
+
+	priceStr := c.FormValue("price")
+	price := product.Price
+	if priceStr != "" {
+		p, err := strconv.ParseFloat(priceStr, 64)
+		if err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid price"})
+		}
+		price = p
+	}
+
+	ingredientsStr := c.FormValue("ingredients")
+	ingredients := product.Ingredients
+	if ingredientsStr != "" {
+		ings, err := parseIngredients(ingredientsStr)
+		if err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid ingredients format"})
+		}
+		ingredients = ings
+	}
+
+	imageURL := product.Image
+	file, err := c.FormFile("image")
+	if err == nil {
+		if !isImageFile(file) {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid image format"})
+		}
+		imgURL, err := h.storageService.UploadImage(context.Background(), file)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to upload image: " + err.Error()})
+		}
+		imageURL = imgURL
+	}
+
+	updatedProduct, err := h.productService.Update(id, name, description, ingredients, price, imageURL)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	return c.JSON(product)
+	return c.JSON(updatedProduct)
 }
 
 // Delete godoc
