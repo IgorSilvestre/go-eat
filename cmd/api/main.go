@@ -9,6 +9,7 @@ import (
 	"restaurant-api/docs"
 	"restaurant-api/internal/adapters/handlers/http"
 	"restaurant-api/internal/adapters/repositories/mongodb"
+	"restaurant-api/internal/adapters/storage"
 	"restaurant-api/internal/core/services"
 
 	"github.com/gofiber/fiber/v2"
@@ -87,10 +88,21 @@ func main() {
 	productService := services.NewProductService(productRepo)
 	orderService := services.NewOrderService(orderRepo, userRepo, productRepo, ingredientRepo)
 
+	// Storage
+	s3Endpoint := os.Getenv("S3_ENDPOINT")
+	s3AccessKey := os.Getenv("S3_ACCESS_KEY")
+	s3SecretKey := os.Getenv("S3_SECRET_KEY")
+	s3BucketName := os.Getenv("S3_BUCKET_NAME")
+
+	s3Storage, err := storage.NewS3Storage(s3Endpoint, s3AccessKey, s3SecretKey, s3BucketName)
+	if err != nil {
+		log.Fatalf("Could not initialize S3 storage: %v", err)
+	}
+
 	// Handlers
 	userHandler := http.NewUserHandler(userService)
 	ingredientHandler := http.NewIngredientHandler(ingredientService)
-	productHandler := http.NewProductHandler(productService)
+	productHandler := http.NewProductHandler(productService, s3Storage)
 	orderHandler := http.NewOrderHandler(orderService)
 
 	app := fiber.New()
