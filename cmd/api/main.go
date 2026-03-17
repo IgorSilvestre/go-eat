@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"net/url"
 	"os"
 
 	"restaurant-api/docs"
@@ -20,7 +19,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 
 	"github.com/golang-migrate/migrate/v4"
-	_ "github.com/golang-migrate/migrate/v4/database/mongodb"
+	migrate_mongo "github.com/golang-migrate/migrate/v4/database/mongodb"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 )
 
@@ -57,17 +56,15 @@ func main() {
 	}
 	fmt.Println("Connected to MongoDB!")
 
-	// Prepare migration URI
-	migrationURI := mongoURI
-	if u, err := url.Parse(mongoURI); err == nil {
-		if u.Path == "" || u.Path == "/" {
-			u.Path = "/" + dbName
-			migrationURI = u.String()
-		}
+	// Run migrations
+	driver, err := migrate_mongo.WithInstance(client, &migrate_mongo.Config{
+		DatabaseName: dbName,
+	})
+	if err != nil {
+		log.Fatalf("Could not create mongodb driver: %v", err)
 	}
 
-	// Run migrations
-	m, err := migrate.New("file://migrations", migrationURI)
+	m, err := migrate.NewWithDatabaseInstance("file://migrations", dbName, driver)
 	if err != nil {
 		log.Fatalf("Could not create migration instance: %v", err)
 	}
