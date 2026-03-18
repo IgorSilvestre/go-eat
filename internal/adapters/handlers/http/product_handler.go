@@ -63,7 +63,7 @@ func isImageFile(file *multipart.FileHeader) bool {
 // @Success 201 {object} domain.Product
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /products [post]
+// @Router /api/v1/products [post]
 func (h *ProductHandler) Create(c *fiber.Ctx) error {
 	name := c.FormValue("name")
 	if name == "" {
@@ -121,7 +121,7 @@ func (h *ProductHandler) Create(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Product
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
-// @Router /products/{id} [get]
+// @Router /api/v1/products/{id} [get]
 func (h *ProductHandler) Get(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -144,7 +144,7 @@ func (h *ProductHandler) Get(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {array} domain.Product
 // @Failure 500 {object} map[string]string
-// @Router /products [get]
+// @Router /api/v1/products [get]
 func (h *ProductHandler) List(c *fiber.Ctx) error {
 	products, err := h.productService.List()
 	if err != nil {
@@ -169,7 +169,7 @@ func (h *ProductHandler) List(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Product
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /products/{id} [put]
+// @Router /api/v1/products/{id} [put]
 func (h *ProductHandler) Update(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -247,7 +247,7 @@ func (h *ProductHandler) Update(c *fiber.Ctx) error {
 // @Success 204
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /products/{id} [delete]
+// @Router /api/v1/products/{id} [delete]
 func (h *ProductHandler) Delete(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 
 	"restaurant-api/docs"
 	"restaurant-api/internal/adapters/handlers/http"
@@ -28,7 +29,7 @@ import (
 // @version 1.0
 // @description REST API for a restaurant backend
 // @host localhost:7000
-// @BasePath /api/v1
+// @BasePath /
 func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, relying on environment variables")
@@ -105,7 +106,17 @@ func main() {
 	productHandler := http.NewProductHandler(productService, s3Storage)
 	orderHandler := http.NewOrderHandler(orderService)
 
-	app := fiber.New()
+	bodyLimitStr := os.Getenv("BODY_LIMIT_MB")
+	bodyLimit := 10 * 1024 * 1024 // 10MB default
+	if bodyLimitStr != "" {
+		if val, err := strconv.Atoi(bodyLimitStr); err == nil {
+			bodyLimit = val * 1024 * 1024
+		}
+	}
+
+	app := fiber.New(fiber.Config{
+		BodyLimit: bodyLimit,
+	})
 	app.Use(cors.New())
 
 	app.Get("/docs/*", scalar.New(scalar.Config{

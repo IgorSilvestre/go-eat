@@ -30,7 +30,7 @@ type createOrderReq struct {
 // @Success 201 {object} domain.Order
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /orders [post]
+// @Router /api/v1/orders [post]
 func (h *OrderHandler) Create(c *fiber.Ctx) error {
 	var req createOrderReq
 	if err := c.BodyParser(&req); err != nil {
@@ -54,7 +54,7 @@ func (h *OrderHandler) Create(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Order
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
-// @Router /orders/{id} [get]
+// @Router /api/v1/orders/{id} [get]
 func (h *OrderHandler) Get(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -77,7 +77,7 @@ func (h *OrderHandler) Get(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {array} domain.Order
 // @Failure 500 {object} map[string]string
-// @Router /orders [get]
+// @Router /api/v1/orders [get]
 func (h *OrderHandler) List(c *fiber.Ctx) error {
 	orders, err := h.orderService.List()
 	if err != nil {

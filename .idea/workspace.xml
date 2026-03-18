@@ -4,14 +4,16 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="refactor: replace migration URI logic with MongoDB driver configuration&#10;&#10;- Removed custom URI manipulation for migrations in favor of `migrate.WithInstance` for MongoDB.&#10;- Updated migration initialization to use database driver and configuration.">
+    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="chore: add Nixpacks configuration for Go project build and deployment">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api.http" beforeDir="false" afterPath="$PROJECT_DIR$/api.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/api/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/api/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/docs.go" beforeDir="false" afterPath="$PROJECT_DIR$/docs/docs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/docs/swagger.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/handlers/http/ingredient_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/handlers/http/ingredient_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/handlers/http/order_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/handlers/http/order_handler.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/adapters/handlers/http/product_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/handlers/http/product_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/storage/s3_storage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/storage/s3_storage.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/core/ports/storage_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/ports/storage_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/handlers/http/user_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/handlers/http/user_handler.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,6 +116,11 @@
     <MESSAGE value="feat: add HTTP request collection for API testing and documentation&#10;&#10;- Added `api.http` file with pre-defined requests for health, users, ingredients, products, and orders endpoints.&#10;- Includes variables for base URL and dynamic request parameters.&#10;- Facilitates API testing and acts as reference documentation for endpoints." />
     <MESSAGE value="feat: update migration URI to include database name if missing&#10;&#10;- Ensured the database name is appended to the migration URI when not specified.&#10;- Updated migration initialization in `cmd/api/main.go` to use the adjusted URI." />
     <MESSAGE value="refactor: replace migration URI logic with MongoDB driver configuration&#10;&#10;- Removed custom URI manipulation for migrations in favor of `migrate.WithInstance` for MongoDB.&#10;- Updated migration initialization to use database driver and configuration." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor: replace migration URI logic with MongoDB driver configuration&#10;&#10;- Removed custom URI manipulation for migrations in favor of `migrate.WithInstance` for MongoDB.&#10;- Updated migration initialization to use database driver and configuration." />
+    <MESSAGE value="refactor: update S3 upload logic to use io.Reader and improve handler integration&#10;&#10;- Replaced `multipart.FileHeader` with `io.Reader` in `StorageService` and S3 adapter for increased flexibility.&#10;- Updated `ProductHandler` to adapt file uploads accordingly.&#10;- Improved multipart form request structure in `api.http` for product creation and updates.&#10;-" />
+    <MESSAGE value="refactor: streamline S3 image upload method and update handler integration&#10;&#10;- Replaced `multipart.FileHeader` with `io.Reader` for more flexible S3 upload parameters.&#10;- Updated `UploadImage` method signature in `StorageService` and corresponding implementations.&#10;- Adjusted product handler endpoints (POST/PUT) to support new upload method.&#10;- Modified `api.http` request payloads to use `multipart/form-data` for image uploads.&#10;- Bumped dependencies (`testify`, `objx`) and added indirect dev tools in `go.mod` and `go.sum`." />
+    <MESSAGE value="chore: update IDE workspace configuration files and cached indexing settings" />
+    <MESSAGE value="test: add unit tests for product handler endpoints (POST/PUT)&#10;&#10;- Added `TestProductHandler_Create` to validate product creation with image upload and form data.&#10;- Added `TestProductHandler_Update` to verify product updates including name changes.&#10;- Mocked `ProductService` and `StorageService` dependencies using `testify/mock`." />
+    <MESSAGE value="chore: add Nixpacks configuration for Go project build and deployment" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: add Nixpacks configuration for Go project build and deployment" />
   </component>
 </project>

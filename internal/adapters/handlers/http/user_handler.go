@@ -31,7 +31,7 @@ type createUserReq struct {
 // @Success 201 {object} domain.User
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /users [post]
+// @Router /api/v1/users [post]
 func (h *UserHandler) Create(c *fiber.Ctx) error {
 	var req createUserReq
 	if err := c.BodyParser(&req); err != nil {
@@ -55,7 +55,7 @@ func (h *UserHandler) Create(c *fiber.Ctx) error {
 // @Success 200 {object} domain.User
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
-// @Router /users/{id} [get]
+// @Router /api/v1/users/{id} [get]
 func (h *UserHandler) Get(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -78,7 +78,7 @@ func (h *UserHandler) Get(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {array} domain.User
 // @Failure 500 {object} map[string]string
-// @Router /users [get]
+// @Router /api/v1/users [get]
 func (h *UserHandler) List(c *fiber.Ctx) error {
 	users, err := h.userService.List()
 	if err != nil {
@@ -99,7 +99,7 @@ func (h *UserHandler) List(c *fiber.Ctx) error {
 // @Success 200 {object} domain.User
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /users/{id} [put]
+// @Router /api/v1/users/{id} [put]
 func (h *UserHandler) Update(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -128,7 +128,7 @@ func (h *UserHandler) Update(c *fiber.Ctx) error {
 // @Success 204
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /users/{id} [delete]
+// @Router /api/v1/users/{id} [delete]
 func (h *UserHandler) Delete(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)

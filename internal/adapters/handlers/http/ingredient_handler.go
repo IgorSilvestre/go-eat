@@ -30,7 +30,7 @@ type createIngredientReq struct {
 // @Success 201 {object} domain.Ingredient
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /ingredients [post]
+// @Router /api/v1/ingredients [post]
 func (h *IngredientHandler) Create(c *fiber.Ctx) error {
 	var req createIngredientReq
 	if err := c.BodyParser(&req); err != nil {
@@ -54,7 +54,7 @@ func (h *IngredientHandler) Create(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Ingredient
 // @Failure 400 {object} map[string]string
 // @Failure 404 {object} map[string]string
-// @Router /ingredients/{id} [get]
+// @Router /api/v1/ingredients/{id} [get]
 func (h *IngredientHandler) Get(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -77,7 +77,7 @@ func (h *IngredientHandler) Get(c *fiber.Ctx) error {
 // @Produce json
 // @Success 200 {array} domain.Ingredient
 // @Failure 500 {object} map[string]string
-// @Router /ingredients [get]
+// @Router /api/v1/ingredients [get]
 func (h *IngredientHandler) List(c *fiber.Ctx) error {
 	ingredients, err := h.ingredientService.List()
 	if err != nil {
@@ -98,7 +98,7 @@ func (h *IngredientHandler) List(c *fiber.Ctx) error {
 // @Success 200 {object} domain.Ingredient
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /ingredients/{id} [put]
+// @Router /api/v1/ingredients/{id} [put]
 func (h *IngredientHandler) Update(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)
@@ -127,7 +127,7 @@ func (h *IngredientHandler) Update(c *fiber.Ctx) error {
 // @Success 204
 // @Failure 400 {object} map[string]string
 // @Failure 500 {object} map[string]string
-// @Router /ingredients/{id} [delete]
+// @Router /api/v1/ingredients/{id} [delete]
 func (h *IngredientHandler) Delete(c *fiber.Ctx) error {
 	idStr := c.Params("id")
 	id, err := uuid.Parse(idStr)

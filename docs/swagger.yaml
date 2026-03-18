@@ -1,31 +1,6 @@
-basePath: /api/v1
+basePath: /
 definitions:
-  internal_adapters_handlers_http.createIngredientReq:
-    properties:
-      name:
-        type: string
-      price:
-        type: number
-    type: object
-  internal_adapters_handlers_http.createOrderReq:
-    properties:
-      items:
-        items:
-          $ref: '#/definitions/restaurant-api_internal_core_ports.OrderItemInput'
-        type: array
-      user_id:
-        type: string
-    type: object
-  internal_adapters_handlers_http.createUserReq:
-    properties:
-      email:
-        type: string
-      name:
-        type: string
-      phone_number:
-        type: string
-    type: object
-  restaurant-api_internal_core_domain.Ingredient:
+  domain.Ingredient:
     properties:
       created_at:
         type: string
@@ -38,7 +13,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  restaurant-api_internal_core_domain.Order:
+  domain.Order:
     properties:
       created_at:
         type: string
@@ -47,7 +22,7 @@ definitions:
       items:
         description: Stored separately in MongoDB, populated in memory
         items:
-          $ref: '#/definitions/restaurant-api_internal_core_domain.OrderProduct'
+          $ref: '#/definitions/domain.OrderProduct'
         type: array
       phone_number:
         description: Stored alongside user_id as per diagram
@@ -59,7 +34,7 @@ definitions:
       user_id:
         type: string
     type: object
-  restaurant-api_internal_core_domain.OrderProduct:
+  domain.OrderProduct:
     properties:
       adicionais:
         description: array of extra ingredient IDs
@@ -94,7 +69,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  restaurant-api_internal_core_domain.Product:
+  domain.Product:
     properties:
       created_at:
         type: string
@@ -116,7 +91,7 @@ definitions:
       updated_at:
         type: string
     type: object
-  restaurant-api_internal_core_domain.User:
+  domain.User:
     properties:
       created_at:
         type: string
@@ -131,7 +106,32 @@ definitions:
       updated_at:
         type: string
     type: object
-  restaurant-api_internal_core_ports.OrderItemInput:
+  http.createIngredientReq:
+    properties:
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  http.createOrderReq:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/ports.OrderItemInput'
+        type: array
+      user_id:
+        type: string
+    type: object
+  http.createUserReq:
+    properties:
+      email:
+        type: string
+      name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  ports.OrderItemInput:
     properties:
       adicionais:
         items:
@@ -151,24 +151,7 @@ info:
   title: Restaurant API
   version: "1.0"
 paths:
-  /health:
-    get:
-      consumes:
-      - '*/*'
-      description: get the status of server
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-      summary: Show the status of server
-      tags:
-      - root
-  /ingredients:
+  /api/v1/ingredients:
     get:
       description: Get a list of all ingredients
       produces:
@@ -178,7 +161,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/restaurant-api_internal_core_domain.Ingredient'
+              $ref: '#/definitions/domain.Ingredient'
             type: array
         "500":
           description: Internal Server Error
@@ -199,14 +182,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/internal_adapters_handlers_http.createIngredientReq'
+          $ref: '#/definitions/http.createIngredientReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.Ingredient'
+            $ref: '#/definitions/domain.Ingredient'
         "400":
           description: Bad Request
           schema:
@@ -222,7 +205,7 @@ paths:
       summary: Create a new ingredient
       tags:
       - ingredients
-  /ingredients/{id}:
+  /api/v1/ingredients/{id}:
     delete:
       description: Delete an ingredient by ID
       parameters:
@@ -263,7 +246,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.Ingredient'
+            $ref: '#/definitions/domain.Ingredient'
         "400":
           description: Bad Request
           schema:
@@ -294,14 +277,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/internal_adapters_handlers_http.createIngredientReq'
+          $ref: '#/definitions/http.createIngredientReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.Ingredient'
+            $ref: '#/definitions/domain.Ingredient'
         "400":
           description: Bad Request
           schema:
@@ -317,7 +300,7 @@ paths:
       summary: Update an ingredient
       tags:
       - ingredients
-  /orders:
+  /api/v1/orders:
     get:
       description: Get a list of all orders
       produces:
@@ -327,7 +310,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/restaurant-api_internal_core_domain.Order'
+              $ref: '#/definitions/domain.Order'
             type: array
         "500":
           description: Internal Server Error
@@ -348,14 +331,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/internal_adapters_handlers_http.createOrderReq'
+          $ref: '#/definitions/http.createOrderReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.Order'
+            $ref: '#/definitions/domain.Order'
         "400":
           description: Bad Request
           schema:
@@ -371,7 +354,7 @@ paths:
       summary: Create a new order
       tags:
       - orders
-  /orders/{id}:
+  /api/v1/orders/{id}:
     get:
       description: Get details of a single order by ID
       parameters:
@@ -386,7 +369,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.Order'
+            $ref: '#/definitions/domain.Order'
         "400":
           description: Bad Request
           schema:
@@ -402,7 +385,7 @@ paths:
       summary: Get order by ID
       tags:
       - orders
-  /products:
+  /api/v1/products:
     get:
       description: Get a list of all products
       produces:
@@ -412,7 +395,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/restaurant-api_internal_core_domain.Product'
+              $ref: '#/definitions/domain.Product'
             type: array
         "500":
           description: Internal Server Error
@@ -458,7 +441,7 @@ paths:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.Product'
+            $ref: '#/definitions/domain.Product'
         "400":
           description: Bad Request
           schema:
@@ -474,7 +457,7 @@ paths:
       summary: Create a new product
       tags:
       - products
-  /products/{id}:
+  /api/v1/products/{id}:
     delete:
       description: Delete a product by ID
       parameters:
@@ -515,7 +498,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.Product'
+            $ref: '#/definitions/domain.Product'
         "400":
           description: Bad Request
           schema:
@@ -567,7 +550,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.Product'
+            $ref: '#/definitions/domain.Product'
         "400":
           description: Bad Request
           schema:
@@ -583,7 +566,7 @@ paths:
       summary: Update a product
       tags:
       - products
-  /users:
+  /api/v1/users:
     get:
       description: Get a list of all users
       produces:
@@ -593,7 +576,7 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/restaurant-api_internal_core_domain.User'
+              $ref: '#/definitions/domain.User'
             type: array
         "500":
           description: Internal Server Error
@@ -614,14 +597,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/internal_adapters_handlers_http.createUserReq'
+          $ref: '#/definitions/http.createUserReq'
       produces:
       - application/json
       responses:
         "201":
           description: Created
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.User'
+            $ref: '#/definitions/domain.User'
         "400":
           description: Bad Request
           schema:
@@ -637,7 +620,7 @@ paths:
       summary: Create a new user
       tags:
       - users
-  /users/{id}:
+  /api/v1/users/{id}:
     delete:
       description: Delete a user by ID
       parameters:
@@ -678,7 +661,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.User'
+            $ref: '#/definitions/domain.User'
         "400":
           description: Bad Request
           schema:
@@ -709,14 +692,14 @@ paths:
         name: request
         required: true
         schema:
-          $ref: '#/definitions/internal_adapters_handlers_http.createUserReq'
+          $ref: '#/definitions/http.createUserReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/restaurant-api_internal_core_domain.User'
+            $ref: '#/definitions/domain.User'
         "400":
           description: Bad Request
           schema:
@@ -732,4 +715,21 @@ paths:
       summary: Update a user
       tags:
       - users
+  /health:
+    get:
+      consumes:
+      - '*/*'
+      description: get the status of server
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Show the status of server
+      tags:
+      - root
 swagger: "2.0"

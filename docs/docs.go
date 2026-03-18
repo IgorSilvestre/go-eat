@@ -15,33 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/health": {
-            "get": {
-                "description": "get the status of server",
-                "consumes": [
-                    "*/*"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "root"
-                ],
-                "summary": "Show the status of server",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/ingredients": {
+        "/api/v1/ingredients": {
             "get": {
                 "description": "Get a list of all ingredients",
                 "produces": [
@@ -57,7 +31,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/restaurant-api_internal_core_domain.Ingredient"
+                                "$ref": "#/definitions/domain.Ingredient"
                             }
                         }
                     },
@@ -91,7 +65,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_adapters_handlers_http.createIngredientReq"
+                            "$ref": "#/definitions/http.createIngredientReq"
                         }
                     }
                 ],
@@ -99,7 +73,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.Ingredient"
+                            "$ref": "#/definitions/domain.Ingredient"
                         }
                     },
                     "400": {
@@ -123,7 +97,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/ingredients/{id}": {
+        "/api/v1/ingredients/{id}": {
             "get": {
                 "description": "Get details of a single ingredient by ID",
                 "produces": [
@@ -146,7 +120,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.Ingredient"
+                            "$ref": "#/definitions/domain.Ingredient"
                         }
                     },
                     "400": {
@@ -195,7 +169,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_adapters_handlers_http.createIngredientReq"
+                            "$ref": "#/definitions/http.createIngredientReq"
                         }
                     }
                 ],
@@ -203,7 +177,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.Ingredient"
+                            "$ref": "#/definitions/domain.Ingredient"
                         }
                     },
                     "400": {
@@ -266,7 +240,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/orders": {
+        "/api/v1/orders": {
             "get": {
                 "description": "Get a list of all orders",
                 "produces": [
@@ -282,7 +256,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/restaurant-api_internal_core_domain.Order"
+                                "$ref": "#/definitions/domain.Order"
                             }
                         }
                     },
@@ -316,7 +290,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_adapters_handlers_http.createOrderReq"
+                            "$ref": "#/definitions/http.createOrderReq"
                         }
                     }
                 ],
@@ -324,7 +298,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.Order"
+                            "$ref": "#/definitions/domain.Order"
                         }
                     },
                     "400": {
@@ -348,7 +322,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/orders/{id}": {
+        "/api/v1/orders/{id}": {
             "get": {
                 "description": "Get details of a single order by ID",
                 "produces": [
@@ -371,7 +345,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.Order"
+                            "$ref": "#/definitions/domain.Order"
                         }
                     },
                     "400": {
@@ -395,7 +369,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/products": {
+        "/api/v1/products": {
             "get": {
                 "description": "Get a list of all products",
                 "produces": [
@@ -411,7 +385,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/restaurant-api_internal_core_domain.Product"
+                                "$ref": "#/definitions/domain.Product"
                             }
                         }
                     },
@@ -477,7 +451,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.Product"
+                            "$ref": "#/definitions/domain.Product"
                         }
                     },
                     "400": {
@@ -501,7 +475,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/products/{id}": {
+        "/api/v1/products/{id}": {
             "get": {
                 "description": "Get details of a single product by ID",
                 "produces": [
@@ -524,7 +498,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.Product"
+                            "$ref": "#/definitions/domain.Product"
                         }
                     },
                     "400": {
@@ -602,7 +576,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.Product"
+                            "$ref": "#/definitions/domain.Product"
                         }
                     },
                     "400": {
@@ -665,7 +639,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users": {
+        "/api/v1/users": {
             "get": {
                 "description": "Get a list of all users",
                 "produces": [
@@ -681,7 +655,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/restaurant-api_internal_core_domain.User"
+                                "$ref": "#/definitions/domain.User"
                             }
                         }
                     },
@@ -715,7 +689,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_adapters_handlers_http.createUserReq"
+                            "$ref": "#/definitions/http.createUserReq"
                         }
                     }
                 ],
@@ -723,7 +697,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Created",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.User"
+                            "$ref": "#/definitions/domain.User"
                         }
                     },
                     "400": {
@@ -747,7 +721,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/{id}": {
+        "/api/v1/users/{id}": {
             "get": {
                 "description": "Get details of a single user by ID",
                 "produces": [
@@ -770,7 +744,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.User"
+                            "$ref": "#/definitions/domain.User"
                         }
                     },
                     "400": {
@@ -819,7 +793,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/internal_adapters_handlers_http.createUserReq"
+                            "$ref": "#/definitions/http.createUserReq"
                         }
                     }
                 ],
@@ -827,7 +801,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/restaurant-api_internal_core_domain.User"
+                            "$ref": "#/definitions/domain.User"
                         }
                     },
                     "400": {
@@ -889,49 +863,36 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/health": {
+            "get": {
+                "description": "get the status of server",
+                "consumes": [
+                    "*/*"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "root"
+                ],
+                "summary": "Show the status of server",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "internal_adapters_handlers_http.createIngredientReq": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string"
-                },
-                "price": {
-                    "type": "number"
-                }
-            }
-        },
-        "internal_adapters_handlers_http.createOrderReq": {
-            "type": "object",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/restaurant-api_internal_core_ports.OrderItemInput"
-                    }
-                },
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "internal_adapters_handlers_http.createUserReq": {
-            "type": "object",
-            "properties": {
-                "email": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "phone_number": {
-                    "type": "string"
-                }
-            }
-        },
-        "restaurant-api_internal_core_domain.Ingredient": {
+        "domain.Ingredient": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -951,7 +912,7 @@ const docTemplate = `{
                 }
             }
         },
-        "restaurant-api_internal_core_domain.Order": {
+        "domain.Order": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -964,7 +925,7 @@ const docTemplate = `{
                     "description": "Stored separately in MongoDB, populated in memory",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/restaurant-api_internal_core_domain.OrderProduct"
+                        "$ref": "#/definitions/domain.OrderProduct"
                     }
                 },
                 "phone_number": {
@@ -982,7 +943,7 @@ const docTemplate = `{
                 }
             }
         },
-        "restaurant-api_internal_core_domain.OrderProduct": {
+        "domain.OrderProduct": {
             "type": "object",
             "properties": {
                 "adicionais": {
@@ -1033,7 +994,7 @@ const docTemplate = `{
                 }
             }
         },
-        "restaurant-api_internal_core_domain.Product": {
+        "domain.Product": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1066,7 +1027,7 @@ const docTemplate = `{
                 }
             }
         },
-        "restaurant-api_internal_core_domain.User": {
+        "domain.User": {
             "type": "object",
             "properties": {
                 "created_at": {
@@ -1089,7 +1050,46 @@ const docTemplate = `{
                 }
             }
         },
-        "restaurant-api_internal_core_ports.OrderItemInput": {
+        "http.createIngredientReq": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "http.createOrderReq": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ports.OrderItemInput"
+                    }
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "http.createUserReq": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                }
+            }
+        },
+        "ports.OrderItemInput": {
             "type": "object",
             "properties": {
                 "adicionais": {
@@ -1116,7 +1116,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:7000",
-	BasePath:         "/api/v1",
+	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Restaurant API",
 	Description:      "REST API for a restaurant backend",
