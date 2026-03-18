@@ -27,13 +27,46 @@ func (r *userRepo) Create(user *domain.User) error {
 	user.UpdatedAt = time.Now()
 
 	_, err := r.coll.InsertOne(context.Background(), user)
-	return err
+	if err != nil {
+		if mongo.IsDuplicateKeyError(err) {
+			return domain.ErrUserAlreadyExists
+		}
+		return err
+	}
+	return nil
 }
 
 func (r *userRepo) GetByID(id uuid.UUID) (*domain.User, error) {
 	var user domain.User
 	err := r.coll.FindOne(context.Background(), bson.M{"_id": id}).Decode(&user)
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, domain.ErrUserNotFound
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepo) GetByEmail(email string) (*domain.User, error) {
+	var user domain.User
+	err := r.coll.FindOne(context.Background(), bson.M{"email": email}).Decode(&user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
+func (r *userRepo) GetByClerkID(clerkID string) (*domain.User, error) {
+	var user domain.User
+	err := r.coll.FindOne(context.Background(), bson.M{"clerk_id": clerkID}).Decode(&user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
 		return nil, err
 	}
 	return &user, nil
@@ -60,7 +93,13 @@ func (r *userRepo) Update(user *domain.User) error {
 		bson.M{"_id": user.ID},
 		user,
 	)
-	return err
+	if err != nil {
+		if mongo.IsDuplicateKeyError(err) {
+			return domain.ErrUserAlreadyExists
+		}
+		return err
+	}
+	return nil
 }
 
 func (r *userRepo) Delete(id uuid.UUID) error {

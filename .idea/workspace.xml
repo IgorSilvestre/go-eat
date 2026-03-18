@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="docs: add note on updating API docs and `api.http` for endpoint changes&#10;&#10;- Emphasized the importance of maintaining documentation integrity when endpoints or their contracts are modified.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/core/domain/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/domain/user.go" afterDir="false" />
+    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="fix: remove `omitempty` tag from ClerkID in user domain model&#10;&#10;- Updated `domain.User` to always include the `ClerkID` field in JSON serialization.">
+      <change beforePath="$PROJECT_DIR$/internal/adapters/handlers/http/user_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/handlers/http/user_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/repositories/mongodb/user_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/repositories/mongodb/user_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/core/ports/user_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/ports/user_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/core/services/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/services/user_service.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,6 +123,18 @@
     <MESSAGE value="feat: extend Swagger docs with ClerkID field in user model&#10;&#10;- Added `ClerkID` property to `domain.User` and `http.createUserReq` objects.&#10;- Updated API endpoints and examples to include `ClerkID` in request payloads.&#10;- Adjusted Swagger JSON and YAML documentation to reflect changes." />
     <MESSAGE value="docs: add AI Agent Guide and update README with S3 and Nixpacks details&#10;&#10;- Created `AGENT.md` to outline project architecture, development guidelines, and common tasks for contributors.&#10;- Updated README to include S3 image storage integration and Nixpacks configuration details." />
     <MESSAGE value="docs: add note on updating API docs and `api.http` for endpoint changes&#10;&#10;- Emphasized the importance of maintaining documentation integrity when endpoints or their contracts are modified." />
-    <option name="LAST_COMMIT_MESSAGE" value="docs: add note on updating API docs and `api.http` for endpoint changes&#10;&#10;- Emphasized the importance of maintaining documentation integrity when endpoints or their contracts are modified." />
+    <MESSAGE value="fix: remove `omitempty` tag from ClerkID in user domain model&#10;&#10;- Updated `domain.User` to always include the `ClerkID` field in JSON serialization." />
+    <option name="LAST_COMMIT_MESSAGE" value="fix: remove `omitempty` tag from ClerkID in user domain model&#10;&#10;- Updated `domain.User` to always include the `ClerkID` field in JSON serialization." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/internal/adapters/repositories/mongodb/user_repository.go</url>
+          <line>28</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

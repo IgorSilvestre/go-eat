@@ -1,6 +1,8 @@
 package http
 
 import (
+	"errors"
+	"restaurant-api/internal/core/domain"
 	"restaurant-api/internal/core/ports"
 
 	"github.com/gofiber/fiber/v2"
@@ -31,6 +33,7 @@ type createUserReq struct {
 // @Param request body createUserReq true "User details"
 // @Success 201 {object} domain.User
 // @Failure 400 {object} map[string]string
+// @Failure 409 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /api/v1/users [post]
 func (h *UserHandler) Create(c *fiber.Ctx) error {
@@ -41,6 +44,9 @@ func (h *UserHandler) Create(c *fiber.Ctx) error {
 
 	user, err := h.userService.Create(req.Name, req.Email, req.PhoneNumber, req.ClerkID)
 	if err != nil {
+		if errors.Is(err, domain.ErrEmailAlreadyExists) || errors.Is(err, domain.ErrClerkIDAlreadyExists) || errors.Is(err, domain.ErrUserAlreadyExists) {
+			return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": err.Error()})
+		}
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 
@@ -99,6 +105,7 @@ func (h *UserHandler) List(c *fiber.Ctx) error {
 // @Param request body createUserReq true "User details"
 // @Success 200 {object} domain.User
 // @Failure 400 {object} map[string]string
+// @Failure 409 {object} map[string]string
 // @Failure 500 {object} map[string]string
 // @Router /api/v1/users/{id} [put]
 func (h *UserHandler) Update(c *fiber.Ctx) error {
@@ -115,6 +122,9 @@ func (h *UserHandler) Update(c *fiber.Ctx) error {
 
 	user, err := h.userService.Update(id, req.Name, req.Email, req.PhoneNumber, req.ClerkID)
 	if err != nil {
+		if errors.Is(err, domain.ErrEmailAlreadyExists) || errors.Is(err, domain.ErrClerkIDAlreadyExists) || errors.Is(err, domain.ErrUserAlreadyExists) {
+			return c.Status(fiber.StatusConflict).JSON(fiber.Map{"error": err.Error()})
+		}
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
 

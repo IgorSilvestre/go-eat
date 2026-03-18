@@ -10,6 +10,8 @@ import (
 type UserRepository interface {
 	Create(user *domain.User) error
 	GetByID(id uuid.UUID) (*domain.User, error)
+	GetByEmail(email string) (*domain.User, error)
+	GetByClerkID(clerkID string) (*domain.User, error)
 	GetAll() ([]domain.User, error)
 	Update(user *domain.User) error
 	Delete(id uuid.UUID) error
