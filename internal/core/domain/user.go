@@ -11,7 +11,7 @@ type User struct {
 	Name        string    `bson:"name" json:"name"`
 	Email       string    `bson:"email" json:"email"`
 	PhoneNumber string    `bson:"phone_number" json:"phone_number"`
-	ClerkID     string    `bson:"clerk_id,omitempty" json:"clerk_id,omitzero"`
+	ClerkID     string    `bson:"clerk_id" json:"clerk_id"`
 	CreatedAt   time.Time `bson:"created_at" json:"created_at"`
 	UpdatedAt   time.Time `bson:"updated_at" json:"updated_at"`
 }

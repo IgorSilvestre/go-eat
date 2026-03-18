@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="feat: extend Swagger docs with ClerkID field in user model&#10;&#10;- Added `ClerkID` property to `domain.User` and `http.createUserReq` objects.&#10;- Updated API endpoints and examples to include `ClerkID` in request payloads.&#10;- Adjusted Swagger JSON and YAML documentation to reflect changes.">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="docs: add note on updating API docs and `api.http` for endpoint changes&#10;&#10;- Emphasized the importance of maintaining documentation integrity when endpoints or their contracts are modified.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/core/domain/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/domain/user.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +14,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="45" />
+    <option name="cachedIndexableFilesCount" value="46" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="GOROOT" url="file:///usr/lib/golang" />
@@ -36,31 +37,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Go Build.go build restaurant-api/cmd/api.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.GoLinterPluginOnboardingV2&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.analysis.ui.options.defaults&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/dunas&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;/home/dunas/github/go-eat/main.go&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Go Build.go build restaurant-api/cmd/api.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.GoLinterPluginOnboardingV2": "true",
+    "RunOnceActivity.GoLinterPluginStorageMigration": "true",
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.go.analysis.ui.options.defaults": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "main",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/home/dunas",
+    "node.js.detected.package.eslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "/home/dunas/github/go-eat/main.go",
+    "settings.editor.selected.configurable": "ml.llm.LLMAIWorkflowsConfigurable",
+    "to.speed.mode.migration.done": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="go build restaurant-api/cmd/api" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="go-eat" />
@@ -117,6 +119,8 @@
     <MESSAGE value="feat: improve minio storage integration and public bucket setup&#10;&#10;- Refactored S3 storage initialization to support private and public endpoints.&#10;- Enhanced bucket setup with policy enforcement to ensure public accessibility by default.&#10;- Updated URL construction for image uploads to use consistent public endpoints.&#10;- Integrated `cmp.Or` for environment variable fallback in MinIO configuration." />
     <MESSAGE value="feat: add ClerkID support to user domain, service, and HTTP handler&#10;&#10;- Extended `User` domain model with a new `ClerkID` field.&#10;- Updated user service methods (`Create`, `Update`) to support `ClerkID`.&#10;- Adjusted HTTP handlers to handle `ClerkID` in request payloads.&#10;- Updated API request examples to include `ClerkID`." />
     <MESSAGE value="feat: extend Swagger docs with ClerkID field in user model&#10;&#10;- Added `ClerkID` property to `domain.User` and `http.createUserReq` objects.&#10;- Updated API endpoints and examples to include `ClerkID` in request payloads.&#10;- Adjusted Swagger JSON and YAML documentation to reflect changes." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: extend Swagger docs with ClerkID field in user model&#10;&#10;- Added `ClerkID` property to `domain.User` and `http.createUserReq` objects.&#10;- Updated API endpoints and examples to include `ClerkID` in request payloads.&#10;- Adjusted Swagger JSON and YAML documentation to reflect changes." />
+    <MESSAGE value="docs: add AI Agent Guide and update README with S3 and Nixpacks details&#10;&#10;- Created `AGENT.md` to outline project architecture, development guidelines, and common tasks for contributors.&#10;- Updated README to include S3 image storage integration and Nixpacks configuration details." />
+    <MESSAGE value="docs: add note on updating API docs and `api.http` for endpoint changes&#10;&#10;- Emphasized the importance of maintaining documentation integrity when endpoints or their contracts are modified." />
+    <option name="LAST_COMMIT_MESSAGE" value="docs: add note on updating API docs and `api.http` for endpoint changes&#10;&#10;- Emphasized the importance of maintaining documentation integrity when endpoints or their contracts are modified." />
   </component>
 </project>
