@@ -4,14 +4,23 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="" />
+    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="refactor: replace migration URI logic with MongoDB driver configuration&#10;&#10;- Removed custom URI manipulation for migrations in favor of `migrate.WithInstance` for MongoDB.&#10;- Updated migration initialization to use database driver and configuration.">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api.http" beforeDir="false" afterPath="$PROJECT_DIR$/api.http" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/handlers/http/product_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/handlers/http/product_handler.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/adapters/storage/s3_storage.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/storage/s3_storage.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/internal/core/ports/storage_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/ports/storage_service.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="4" />
+    <option name="cachedIndexableFilesCount" value="44" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="GOROOT" url="file:///usr/lib/golang" />
   <component name="Git.Settings">
@@ -35,12 +44,14 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;Go Build.go build restaurant-api/cmd/api.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.GoLinterPluginOnboardingV2&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.GoLinterPluginStorageMigration&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.analysis.ui.options.defaults&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
@@ -92,5 +103,17 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="chore: update Fiber app to listen on port 7000 and refine module dependencies" />
+    <MESSAGE value="chore: add IDE configuration files for Go module" />
+    <MESSAGE value="fix: correct Swagger docs import and update Scalar UI configuration" />
+    <MESSAGE value="feat: add CORS middleware to Fiber app" />
+    <MESSAGE value="docs: add comprehensive README with project overview, features, setup, and architecture details&#10;&#10;- Added sections on features, tech stack, architecture, installation, and API documentation  &#10;- Included detailed project structure and environment variable requirements  &#10;- Provided instructions for running the application and accessing Scalar-based API documentation" />
+    <MESSAGE value="feat: make MongoDB database name configurable via environment variable&#10;&#10;- Added `DB_MONGO_NAME` environment variable to allow configuring the database name (defaults to &quot;restaurant&quot;).&#10;- Updated `cmd/api/main.go` to use the new variable when connecting to MongoDB.&#10;- Updated README to include `DB_MONGO_NAME` in the list of required environment variables." />
+    <MESSAGE value="feat: add HTTP request collection for API testing and documentation&#10;&#10;- Added `api.http` file with pre-defined requests for health, users, ingredients, products, and orders endpoints.&#10;- Includes variables for base URL and dynamic request parameters.&#10;- Facilitates API testing and acts as reference documentation for endpoints." />
+    <MESSAGE value="feat: update migration URI to include database name if missing&#10;&#10;- Ensured the database name is appended to the migration URI when not specified.&#10;- Updated migration initialization in `cmd/api/main.go` to use the adjusted URI." />
+    <MESSAGE value="refactor: replace migration URI logic with MongoDB driver configuration&#10;&#10;- Removed custom URI manipulation for migrations in favor of `migrate.WithInstance` for MongoDB.&#10;- Updated migration initialization to use database driver and configuration." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactor: replace migration URI logic with MongoDB driver configuration&#10;&#10;- Removed custom URI manipulation for migrations in favor of `migrate.WithInstance` for MongoDB.&#10;- Updated migration initialization to use database driver and configuration." />
   </component>
 </project>
