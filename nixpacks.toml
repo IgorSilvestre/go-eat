@@ -1,0 +1,14 @@
+[phases.setup]
+nixPkgs = ["go_1_24"]
+
+[phases.install]
+cmds = ["go mod download"]
+
+[phases.build]
+cmds = ["go build -o api cmd/api/main.go"]
+
+[start]
+cmd = "./api"
+
+[variables]
+PORT = "7000"
