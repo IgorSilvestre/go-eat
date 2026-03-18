@@ -15,11 +15,12 @@ func NewUserService(repo ports.UserRepository) ports.UserService {
 	return &userService{repo: repo}
 }
 
-func (s *userService) Create(name, email, phone string) (*domain.User, error) {
+func (s *userService) Create(name, email, phone, clerkID string) (*domain.User, error) {
 	user := &domain.User{
 		Name:        name,
 		Email:       email,
 		PhoneNumber: phone,
+		ClerkID:     clerkID,
 	}
 	err := s.repo.Create(user)
 	if err != nil {
@@ -36,7 +37,7 @@ func (s *userService) List() ([]domain.User, error) {
 	return s.repo.GetAll()
 }
 
-func (s *userService) Update(id uuid.UUID, name, email, phone string) (*domain.User, error) {
+func (s *userService) Update(id uuid.UUID, name, email, phone, clerkID string) (*domain.User, error) {
 	user, err := s.repo.GetByID(id)
 	if err != nil {
 		return nil, err
@@ -44,6 +45,7 @@ func (s *userService) Update(id uuid.UUID, name, email, phone string) (*domain.U
 	user.Name = name
 	user.Email = email
 	user.PhoneNumber = phone
+	user.ClerkID = clerkID
 
 	err = s.repo.Update(user)
 	if err != nil {

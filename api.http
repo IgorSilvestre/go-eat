@@ -21,7 +21,8 @@ Content-Type: application/json
 {
   "name": "John Doe",
   "email": "john@example.com",
-  "phone_number": "+1234567890"
+  "phone_number": "+1234567890",
+  "clerk_id": "user_2N7X3Y4Z5A6B7C8D9E0F1G2H"
 }
 
 > {% client.global.set("user_id", response.body.id); %}

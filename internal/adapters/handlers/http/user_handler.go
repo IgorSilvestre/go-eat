@@ -19,11 +19,12 @@ type createUserReq struct {
 	Name        string `json:"name"`
 	Email       string `json:"email"`
 	PhoneNumber string `json:"phone_number"`
+	ClerkID     string `json:"clerk_id"`
 }
 
 // Create godoc
 // @Summary Create a new user
-// @Description Create a new user with name, email and phone number
+// @Description Create a new user with name, email, phone number and clerk_id
 // @Tags users
 // @Accept json
 // @Produce json
@@ -38,7 +39,7 @@ func (h *UserHandler) Create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	user, err := h.userService.Create(req.Name, req.Email, req.PhoneNumber)
+	user, err := h.userService.Create(req.Name, req.Email, req.PhoneNumber, req.ClerkID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
@@ -112,7 +113,7 @@ func (h *UserHandler) Update(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
 	}
 
-	user, err := h.userService.Update(id, req.Name, req.Email, req.PhoneNumber)
+	user, err := h.userService.Update(id, req.Name, req.Email, req.PhoneNumber, req.ClerkID)
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": err.Error()})
 	}
