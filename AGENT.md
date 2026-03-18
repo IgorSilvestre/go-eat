@@ -56,6 +56,7 @@ Follow modern Go idioms and the project's established patterns:
 - Keep `internal/core/domain` free of infrastructure-specific tags (like MongoDB or JSON) unless strictly necessary for the whole application.
 - Use dependency injection: services should receive repositories via interfaces (ports).
 - Errors should be handled or wrapped, never ignored.
+- **IMPORTANT**: Always update API documentation (Swagger/Scalar) and `api.http` when an endpoint or its contract changes.
 
 ## 🛠️ Common Tasks
 
