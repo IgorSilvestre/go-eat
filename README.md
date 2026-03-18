@@ -9,6 +9,7 @@
 - **Product Management**: Create and manage products (dishes) with ingredients.
 - **Order Management**: Process and track customer orders.
 - **Database Migrations**: Automated MongoDB schema migrations using `golang-migrate`.
+- **Image Storage**: Integration with S3 (via Minio-go client) for product images.
 - **API Documentation**: Interactive documentation using Scalar and Swagger.
 - **Health Check**: Simple endpoint to verify server status.
 
@@ -17,6 +18,7 @@
 - **Go 1.24**: Core programming language.
 - **Fiber v2**: High-performance HTTP web framework.
 - **MongoDB**: NoSQL database for flexible data storage.
+- **Minio/S3**: For image storage and management.
 - **Golang Migrate**: Tool for managing database migrations.
 - **Swagger/Scalar**: For interactive API documentation.
 
@@ -45,8 +47,20 @@ The project follows the **Hexagonal Architecture (Ports and Adapters)** pattern:
 The application requires the following environment variables to be set in a `.env` file or in your environment:
 
 ```env
+# MongoDB
 DB_MONGO_URL=mongodb://your-username:your-password@your-host:your-port/restaurant?authSource=admin
 DB_MONGO_NAME=restaurant
+
+# Minio/S3
+MINIO_ENDPOINT=localhost:9000
+MINIO_PRIVATE_ENDPOINT=localhost:9000  # Optional, falls back to MINIO_ENDPOINT
+MINIO_PUBLIC_ENDPOINT=localhost:9000   # Optional, falls back to MINIO_ENDPOINT
+MINIO_ROOT_USER=minioadmin
+MINIO_ROOT_PASSWORD=minioadmin
+MINIO_BUCKET_IMAGES_PUBLIC=restaurant-images
+
+# Optional
+BODY_LIMIT_MB=10
 ```
 
 ### Installation
@@ -95,5 +109,6 @@ The project includes built-in API documentation using Scalar. Once the server is
 │       ├── ports/          # Interfaces (Repository/Service)
 │       └── services/       # Service implementation
 ├── migrations/             # MongoDB migration files
+├── nixpacks.toml           # Nixpacks configuration for deployment
 └── go.mod                  # Go module definition
 ```

@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="feat: improve minio storage integration and public bucket setup&#10;&#10;- Refactored S3 storage initialization to support private and public endpoints.&#10;- Enhanced bucket setup with policy enforcement to ensure public accessibility by default.&#10;- Updated URL construction for image uploads to use consistent public endpoints.&#10;- Integrated `cmp.Or` for environment variable fallback in MinIO configuration.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api.http" beforeDir="false" afterPath="$PROJECT_DIR$/api.http" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/adapters/handlers/http/user_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/adapters/handlers/http/user_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/core/domain/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/domain/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/core/ports/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/ports/user_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/core/services/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/core/services/user_service.go" afterDir="false" />
+    <list default="true" id="5248e911-d344-40a8-a1dc-52c42cd48033" name="Changes" comment="feat: extend Swagger docs with ClerkID field in user model&#10;&#10;- Added `ClerkID` property to `domain.User` and `http.createUserReq` objects.&#10;- Updated API endpoints and examples to include `ClerkID` in request payloads.&#10;- Adjusted Swagger JSON and YAML documentation to reflect changes.">
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,6 +115,8 @@
     <MESSAGE value="chore: add Nixpacks configuration for Go project build and deployment" />
     <MESSAGE value="feat: update API base path and Swagger docs, add environment-based request body limit&#10;&#10;- Changed base path from `/api/v1` to `/` in Swagger documentation and API routes.&#10;- Added configurable request body size limit via `BODY_LIMIT_MB` environment variable in Fiber configuration.&#10;- Refactored object references in generated Swagger docs for consistency." />
     <MESSAGE value="feat: improve minio storage integration and public bucket setup&#10;&#10;- Refactored S3 storage initialization to support private and public endpoints.&#10;- Enhanced bucket setup with policy enforcement to ensure public accessibility by default.&#10;- Updated URL construction for image uploads to use consistent public endpoints.&#10;- Integrated `cmp.Or` for environment variable fallback in MinIO configuration." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: improve minio storage integration and public bucket setup&#10;&#10;- Refactored S3 storage initialization to support private and public endpoints.&#10;- Enhanced bucket setup with policy enforcement to ensure public accessibility by default.&#10;- Updated URL construction for image uploads to use consistent public endpoints.&#10;- Integrated `cmp.Or` for environment variable fallback in MinIO configuration." />
+    <MESSAGE value="feat: add ClerkID support to user domain, service, and HTTP handler&#10;&#10;- Extended `User` domain model with a new `ClerkID` field.&#10;- Updated user service methods (`Create`, `Update`) to support `ClerkID`.&#10;- Adjusted HTTP handlers to handle `ClerkID` in request payloads.&#10;- Updated API request examples to include `ClerkID`." />
+    <MESSAGE value="feat: extend Swagger docs with ClerkID field in user model&#10;&#10;- Added `ClerkID` property to `domain.User` and `http.createUserReq` objects.&#10;- Updated API endpoints and examples to include `ClerkID` in request payloads.&#10;- Adjusted Swagger JSON and YAML documentation to reflect changes." />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: extend Swagger docs with ClerkID field in user model&#10;&#10;- Added `ClerkID` property to `domain.User` and `http.createUserReq` objects.&#10;- Updated API endpoints and examples to include `ClerkID` in request payloads.&#10;- Adjusted Swagger JSON and YAML documentation to reflect changes." />
   </component>
 </project>
