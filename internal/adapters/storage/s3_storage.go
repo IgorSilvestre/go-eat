@@ -3,7 +3,7 @@ package storage
 import (
 	"context"
 	"fmt"
-	"mime/multipart"
+	"io"
 	"net/url"
 	"path/filepath"
 	"strings"
@@ -44,26 +44,19 @@ func NewS3Storage(endpoint, accessKeyID, secretAccessKey, bucketName string) (*S
 	}, nil
 }
 
-func (s *S3Storage) UploadImage(ctx context.Context, fileHeader *multipart.FileHeader) (string, error) {
-	file, err := fileHeader.Open()
-	if err != nil {
-		return "", fmt.Errorf("failed to open file: %w", err)
-	}
-	defer file.Close()
-
-	ext := strings.ToLower(filepath.Ext(fileHeader.Filename))
+func (s *S3Storage) UploadImage(ctx context.Context, reader io.Reader, filename string, contentType string) (string, error) {
+	ext := strings.ToLower(filepath.Ext(filename))
 	if ext == "" {
 		ext = ".jpg"
 	}
 
 	objectName := fmt.Sprintf("%s%s", uuid.New().String(), ext)
 
-	contentType := fileHeader.Header.Get("Content-Type")
 	if contentType == "" {
 		contentType = "application/octet-stream"
 	}
 
-	_, err = s.client.PutObject(ctx, s.bucketName, objectName, file, fileHeader.Size, minio.PutObjectOptions{
+	_, err := s.client.PutObject(ctx, s.bucketName, objectName, reader, -1, minio.PutObjectOptions{
 		ContentType: contentType,
 	})
 	if err != nil {

@@ -1,7 +1,6 @@
 package http
 
 import (
-	"context"
 	"mime/multipart"
 	"path/filepath"
 	"strconv"
@@ -23,14 +22,6 @@ func NewProductHandler(productService ports.ProductService, storageService ports
 		productService: productService,
 		storageService: storageService,
 	}
-}
-
-type createProductReq struct {
-	Name        string      `json:"name"`
-	Description string      `json:"description"`
-	Ingredients []uuid.UUID `json:"ingredients"`
-	Price       float64     `json:"price"`
-	Image       string      `json:"image"`
 }
 
 func parseIngredients(ingredientsStr string) ([]uuid.UUID, error) {
@@ -102,7 +93,13 @@ func (h *ProductHandler) Create(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid image format"})
 	}
 
-	imageURL, err := h.storageService.UploadImage(context.Background(), file)
+	f, err := file.Open()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to open image"})
+	}
+	defer f.Close()
+
+	imageURL, err := h.storageService.UploadImage(c.UserContext(), f, file.Filename, file.Header.Get("Content-Type"))
 	if err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to upload image: " + err.Error()})
 	}
@@ -221,7 +218,13 @@ func (h *ProductHandler) Update(c *fiber.Ctx) error {
 		if !isImageFile(file) {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "invalid image format"})
 		}
-		imgURL, err := h.storageService.UploadImage(context.Background(), file)
+		f, err := file.Open()
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to open image"})
+		}
+		defer f.Close()
+
+		imgURL, err := h.storageService.UploadImage(c.UserContext(), f, file.Filename, file.Header.Get("Content-Type"))
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "failed to upload image: " + err.Error()})
 		}

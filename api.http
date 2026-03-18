@@ -86,15 +86,30 @@ GET {{baseUrl}}/products
 
 ### Create Product
 POST {{baseUrl}}/products
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-{
-  "name": "Burger",
-  "description": "Delicious beef burger",
-  "ingredients": ["{{ingredient_id}}"],
-  "price": 10.00,
-  "image": "burger.jpg"
-}
+--WebAppBoundary
+Content-Disposition: form-data; name="name"
+
+Burger
+--WebAppBoundary
+Content-Disposition: form-data; name="description"
+
+Delicious beef burger
+--WebAppBoundary
+Content-Disposition: form-data; name="price"
+
+10.00
+--WebAppBoundary
+Content-Disposition: form-data; name="ingredients"
+
+{{ingredient_id}}
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="burger.jpg"
+Content-Type: image/jpeg
+
+< ./burger.jpg
+--WebAppBoundary--
 
 > {% client.global.set("product_id", response.body.id); %}
 
@@ -103,15 +118,22 @@ GET {{baseUrl}}/products/{{product_id}}
 
 ### Update Product
 PUT {{baseUrl}}/products/{{product_id}}
-Content-Type: application/json
+Content-Type: multipart/form-data; boundary=WebAppBoundary
 
-{
-  "name": "Cheeseburger",
-  "description": "Delicious beef burger with cheese",
-  "ingredients": ["{{ingredient_id}}"],
-  "price": 11.00,
-  "image": "cheeseburger.jpg"
-}
+--WebAppBoundary
+Content-Disposition: form-data; name="name"
+
+Cheeseburger
+--WebAppBoundary
+Content-Disposition: form-data; name="price"
+
+11.00
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="cheeseburger.jpg"
+Content-Type: image/jpeg
+
+< ./cheeseburger.jpg
+--WebAppBoundary--
 
 ### Delete Product
 DELETE {{baseUrl}}/products/{{product_id}}

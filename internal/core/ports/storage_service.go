@@ -2,9 +2,9 @@ package ports
 
 import (
 	"context"
-	"mime/multipart"
+	"io"
 )
 
 type StorageService interface {
-	UploadImage(ctx context.Context, file *multipart.FileHeader) (string, error)
+	UploadImage(ctx context.Context, reader io.Reader, filename string, contentType string) (string, error)
 }
