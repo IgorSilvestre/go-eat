@@ -14,15 +14,15 @@ import (
 )
 
 type S3Storage struct {
-	client     *minio.Client
-	bucketName string
-	endpoint   string
+	client         *minio.Client
+	bucketName     string
+	publicEndpoint string
 }
 
-func NewS3Storage(endpoint, accessKeyID, secretAccessKey, bucketName string) (*S3Storage, error) {
-	parsedURL, err := url.Parse(endpoint)
+func NewS3Storage(connectionEndpoint, accessKeyID, secretAccessKey, bucketName, publicEndpoint string) (*S3Storage, error) {
+	parsedURL, err := url.Parse(connectionEndpoint)
 	if err != nil {
-		return nil, fmt.Errorf("invalid endpoint URL: %w", err)
+		return nil, fmt.Errorf("invalid connection endpoint URL: %w", err)
 	}
 
 	useSSL := parsedURL.Scheme == "https"
@@ -37,11 +37,32 @@ func NewS3Storage(endpoint, accessKeyID, secretAccessKey, bucketName string) (*S
 		return nil, fmt.Errorf("failed to initialize minio client: %w", err)
 	}
 
-	return &S3Storage{
-		client:     client,
-		bucketName: bucketName,
-		endpoint:   endpoint,
-	}, nil
+	storage := &S3Storage{
+		client:         client,
+		bucketName:     bucketName,
+		publicEndpoint: publicEndpoint,
+	}
+
+	// Ensure bucket exists and is public
+	ctx := context.Background()
+	exists, err := client.BucketExists(ctx, bucketName)
+	if err != nil {
+		return nil, fmt.Errorf("failed to check bucket existence: %w", err)
+	}
+	if !exists {
+		err = client.MakeBucket(ctx, bucketName, minio.MakeBucketOptions{})
+		if err != nil {
+			return nil, fmt.Errorf("failed to create bucket: %w", err)
+		}
+	}
+
+	policy := fmt.Sprintf(`{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Principal":{"AWS":["*"]},"Action":["s3:GetObject"],"Resource":["arn:aws:s3:::%s/*"]}]}`, bucketName)
+	err = client.SetBucketPolicy(ctx, bucketName, policy)
+	if err != nil {
+		return nil, fmt.Errorf("failed to set bucket policy: %w", err)
+	}
+
+	return storage, nil
 }
 
 func (s *S3Storage) UploadImage(ctx context.Context, reader io.Reader, filename string, contentType string) (string, error) {
@@ -63,7 +84,10 @@ func (s *S3Storage) UploadImage(ctx context.Context, reader io.Reader, filename 
 		return "", fmt.Errorf("failed to upload object: %w", err)
 	}
 
+	// Ensure public endpoint doesn't end with a slash for consistent URL construction
+	publicEndpoint := strings.TrimSuffix(s.publicEndpoint, "/")
+
 	// Construct public URL
-	publicURL := fmt.Sprintf("%s/%s/%s", s.endpoint, s.bucketName, objectName)
+	publicURL := fmt.Sprintf("%s/%s/%s", publicEndpoint, s.bucketName, objectName)
 	return publicURL, nil
 }

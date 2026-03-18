@@ -1,6 +1,7 @@
 package main
 
 import (
+	"cmp"
 	"context"
 	"fmt"
 	"log"
@@ -90,15 +91,21 @@ func main() {
 	orderService := services.NewOrderService(orderRepo, userRepo, productRepo, ingredientRepo)
 
 	// Storage
-	s3Endpoint := os.Getenv("S3_ENDPOINT")
-	s3AccessKey := os.Getenv("S3_ACCESS_KEY")
-	s3SecretKey := os.Getenv("S3_SECRET_KEY")
-	s3BucketName := os.Getenv("S3_BUCKET_NAME")
+	minioPrivateEndpoint := cmp.Or(os.Getenv("MINIO_PRIVATE_ENDPOINT"), os.Getenv("MINIO_ENDPOINT"))
+	minioPublicEndpoint := cmp.Or(os.Getenv("MINIO_PUBLIC_ENDPOINT"), os.Getenv("MINIO_ENDPOINT"))
+	minioAccessKey := os.Getenv("MINIO_ROOT_USER")
+	minioSecretKey := os.Getenv("MINIO_ROOT_PASSWORD")
+	minioBucketName := os.Getenv("MINIO_BUCKET_IMAGES_PUBLIC")
 
-	s3Storage, err := storage.NewS3Storage(s3Endpoint, s3AccessKey, s3SecretKey, s3BucketName)
+	if minioPrivateEndpoint == "" {
+		log.Fatal("Neither MINIO_PRIVATE_ENDPOINT nor MINIO_ENDPOINT environment variable is set")
+	}
+
+	s3Storage, err := storage.NewS3Storage(minioPrivateEndpoint, minioAccessKey, minioSecretKey, minioBucketName, minioPublicEndpoint)
 	if err != nil {
 		log.Fatalf("Could not initialize S3 storage: %v", err)
 	}
+	fmt.Println("Connected to S3 storage!")
 
 	// Handlers
 	userHandler := http.NewUserHandler(userService)
