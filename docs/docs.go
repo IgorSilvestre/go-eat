@@ -671,7 +671,7 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Create a new user with name, email and phone number",
+                "description": "Create a new user with name, email, phone number and clerk_id",
                 "consumes": [
                     "application/json"
                 ],
@@ -1030,6 +1030,9 @@ const docTemplate = `{
         "domain.User": {
             "type": "object",
             "properties": {
+                "clerk_id": {
+                    "type": "string"
+                },
                 "created_at": {
                     "type": "string"
                 },
@@ -1078,6 +1081,9 @@ const docTemplate = `{
         "http.createUserReq": {
             "type": "object",
             "properties": {
+                "clerk_id": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },

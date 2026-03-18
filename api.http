@@ -37,7 +37,8 @@ Content-Type: application/json
 {
   "name": "John Updated",
   "email": "john_updated@example.com",
-  "phone_number": "+0987654321"
+  "phone_number": "+0987654321",
+  "clerk_id": "user_2N7X3Y4Z5A6B7C8D9E0F1G2H"
 }
 
 ### Delete User

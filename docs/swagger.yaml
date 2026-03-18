@@ -93,6 +93,8 @@ definitions:
     type: object
   domain.User:
     properties:
+      clerk_id:
+        type: string
       created_at:
         type: string
       email:
@@ -124,6 +126,8 @@ definitions:
     type: object
   http.createUserReq:
     properties:
+      clerk_id:
+        type: string
       email:
         type: string
       name:
@@ -590,7 +594,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: Create a new user with name, email and phone number
+      description: Create a new user with name, email, phone number and clerk_id
       parameters:
       - description: User details
         in: body
